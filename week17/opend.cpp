@@ -3,26 +3,40 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <errno.h>
 #include <unistd.h>
 using namespace std;
 
 int main()
 {
+    // char * directory = new char[100];
     char directory[1000];
-    struct dirent *info;
-    struct stat * detail;
+    struct dirent *info = new struct dirent;
+    struct stat * detail = new struct stat;
     getcwd(directory, 1000);
-    // DIR * direct = opendir((char * )directory);
-    DIR * direct = opendir("/home/schrodecat/Documents/OS/week17");
+    DIR * direct = opendir(directory);
     
-    char * name;
-    cout << "file name : " << endl;
-    cin >> name; 
-    mkdir(name, 0775);
+    char * name = new char[100];
+    // cout << "file name : " << endl;
+    // cin >> name; 
+    // if( mkdir(name, 0775) == -1)
+    // {
+    //     if(errno == 14)  cout << "Bad address! Please try again later!" << endl;
+    //     cout << "mkdir error, please try it later" << endl;
+    // }
+    // cout << "Delete file name: " << endl;
+    // cin >> name;
+    // if(remove(name) == -1)
+    // {
+    //     cout << "Delete file error, please try it later" << endl;
+    // }
+
+    delete name;
+
 
     while(info = readdir(direct))
     {
-        cout << "----------------------------------------" << endl;
+        cout << endl << "----------------------------------------" << endl;
         cout << "filename: " << info->d_name << endl;
         cout << "inode: " << info->d_ino << endl;
         cout << "offset to next dirent: " << info->d_off << endl;
@@ -44,6 +58,7 @@ int main()
 
 
     closedir(direct);
+    // delete directory;
     return 0;
 }
 
