@@ -15,8 +15,10 @@ const int BLANK2 = 10;
 
 int main()
 {
-    char directory[1000];
+    char *  directory = new char[1000];
     struct stat *  file_stat;
+    struct dirent * direct_stat;
+
     
     cout << "File System is running!" << endl
     << ">----------------------------------------------------------------------<" << endl;
@@ -29,31 +31,52 @@ int main()
     {
         cout << directory << endl;
     }
+
+    DIR * direct = opendir(directory);
+    // delete directory;
+    while((direct_stat = readdir(direct)) != NULL){
+        cout << "file name: " << direct_stat->d_name << endl;
         
-    if(stat("/home/schrodecat/Documents/OS/week17/实验十四+文件和目录.pdf", file_stat) == -1)
-    /* get the state of the file */
-    {
-        cout << "Reading file stat2 error!" << endl;
-        cout << "Errno: " << errno << endl;
-        if(errno == 14)
-        cout << "Bad address! Please try again later!" << endl;
+        char * position = new char;
+        char * back_up = position;
+        memset(position, 0, sizeof(position));
+        // strcat(position, directory);
+        // strcat(position, "/");
+        strcat(position, direct_stat->d_name);
+        cout << position << endl;
+        // if(stat(position, file_stat) == -1)
+        if(stat("/home/schrodecat/Documents/OS/week17/实验十四+文件和目录.pdf", file_stat) == -1)
+        /* get the state of the file */
+        {
+            cout << "Reading file stat2 error!" << endl;
+            cout << "Errno: " << errno << endl;
+            if(errno == 14)
+            cout << "Bad address! Please try again later!" << endl;
+        }
+        else
+        {
+            cout << left;
+            cout << setw(BLANK)<< "Inode:" << setw(BLANK2) << file_stat->st_ino << endl
+                << setw(BLANK) << "Mode:" << setw(BLANK2) << oct << file_stat->st_mode << endl
+                << setw(BLANK) << "Links:" << setw(BLANK2) << dec << file_stat->st_nlink << endl
+                << setw(BLANK) << "User ID:" << setw(BLANK2) << dec << file_stat->st_uid << endl
+                << setw(BLANK) << "Group ID:" << setw(BLANK2) << dec << file_stat->st_gid << endl
+                << setw(BLANK) << "Device:" << setw(0) << hex << file_stat->st_rdev << " / " << hex << file_stat->st_dev << "(hex) / " << dec << file_stat->st_dev << "(dec)" << endl 
+                << setw(BLANK) << "Size:" << setw(BLANK2) << dec << file_stat->st_size << endl
+                << setw(BLANK) << "IO Block Size:" << setw(BLANK2) << file_stat->st_blksize << endl
+                << setw(BLANK) << "blocks:" << setw(BLANK2) << file_stat->st_blocks << endl 
+                << setw(BLANK) << "Last access:" << setw(BLANK2) << ctime(&(file_stat->st_atime))
+                << setw(BLANK) << "Last modify:" << setw(BLANK2) << ctime(&(file_stat->st_mtime))
+                << setw(BLANK) << "Last change:" << setw(BLANK2) << ctime(&(file_stat->st_ctime)) << endl;
+        }
+
+        // delete back_up;
     }
-    else
-    {
-        cout << left;
-        cout << setw(BLANK)<< "Inode:" << setw(BLANK2) << file_stat->st_ino << endl
-            << setw(BLANK) << "Mode:" << setw(BLANK2) << oct << file_stat->st_mode << endl
-            << setw(BLANK) << "Links:" << setw(BLANK2) << dec << file_stat->st_nlink << endl
-            << setw(BLANK) << "User ID:" << setw(BLANK2) << dec << file_stat->st_uid << endl
-            << setw(BLANK) << "Group ID:" << setw(BLANK2) << dec << file_stat->st_gid << endl
-            << setw(BLANK) << "Device:" << setw(0) << hex << file_stat->st_rdev << " / " << hex << file_stat->st_dev << "(hex) / " << dec << file_stat->st_dev << "(dec)" << endl 
-            << setw(BLANK) << "Size:" << setw(BLANK2) << dec << file_stat->st_size << endl
-            << setw(BLANK) << "IO Block Size:" << setw(BLANK2) << file_stat->st_blksize << endl
-            << setw(BLANK) << "blocks:" << setw(BLANK2) << file_stat->st_blocks << endl 
-            << setw(BLANK) << "Last access:" << setw(BLANK2) << ctime(&(file_stat->st_atime))
-            << setw(BLANK) << "Last modify:" << setw(BLANK2) << ctime(&(file_stat->st_mtime))
-            << setw(BLANK) << "Last change:" << setw(BLANK2) << ctime(&(file_stat->st_ctime)) << endl;
-    }
+     
+    
+
+    closedir(direct);
+    // delete directory;
     return 0;
 }
 
