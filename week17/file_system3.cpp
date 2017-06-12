@@ -41,18 +41,19 @@ int main()
 
 void create()
 {
-    char * name = new char;
+    char * name = new char[100];
     cout << "new file name : " << endl;
     cin >> name; 
     ofstream file(name);
     file.close();
     cout << name << " is successfully created!" << endl;
 
-
+    delete name;
 }
+
 void rm()
 {
-    char * name = new char;
+    char * name = new char[100];
     cout << "Delete file name: " << endl;
     cin >> name;
     if(remove(name) == -1)
@@ -63,11 +64,12 @@ void rm()
     {
         cout << name << " is successfully deleted!" << endl;
     }
-
+    delete name;
 }
+
 void makedir()
 {
-    char * name = new char;
+    char * name = new char[100];
     cout << "new file name : " << endl;
     cin >> name; 
     if( mkdir(name, 0775) == -1)
@@ -80,7 +82,9 @@ void makedir()
         cout << name << " is created!" << endl;
     }
 
+    delete name;
 }
+
 void list()
 {
     // char *  directory = new char[1000];
@@ -110,11 +114,8 @@ void list()
         char * position = new char;
         char * back_up = position;
         memset(position, 0, sizeof(position));
-        // strcat(position, directory);
-        // strcat(position, "/");
         strcat(position, direct_stat->d_name);
 
-        // if(stat("/home/schrodecat/Documents/OS/week17/实验十四+文件和目录.pdf", file_stat) == -1)
         if(stat(position, file_stat) == -1)
         /* get the state of the file */
         {
@@ -151,19 +152,11 @@ void list()
                 cout << endl;
         }
 
-        
+        delete back_up;
     }
      
     closedir(direct);
 }
-
-// string GT(ctime input)
-// {
-//     string result;
-//     result.Format("%d-%d-%d-%d",input.getyear(),input.getmonth(),input.getday());
-//     return result;
-// }
-
 /*
 struct stat {
     dev_t         st_dev;       //文件的设备编号
