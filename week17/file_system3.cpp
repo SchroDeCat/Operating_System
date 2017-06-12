@@ -111,7 +111,8 @@ void list()
     {
         cout << "file name: " << direct_stat->d_name << endl;
         
-        char * position = new char;
+        char * position = new char[100];
+        // char * position;
         char * back_up = position;
         memset(position, 0, sizeof(position));
         strcat(position, direct_stat->d_name);
@@ -151,10 +152,10 @@ void list()
                 if(S_ISCHR(file_stat->st_mode)) cout << "Character" << endl;
                 cout << endl;
         }
-
         delete back_up;
     }
-     
+    
+    delete file_stat;
     closedir(direct);
 }
 /*
